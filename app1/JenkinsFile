@@ -1,0 +1,42 @@
+pipeline {
+    agent {
+        docker {
+            image 'mzain/test121:11'
+            args '--user root -v /run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker --name zein' // mount Docker socket to access the host's Docker daemon       
+        }
+        
+    }
+    environment {
+             DOCKER_IMAGE = " mzain/maven:${BUILD_NUMBER}"
+             // DOCKERFILE_LOCATION = "/spring-boot-app/Dockerfile"
+             REGISTRY_CREDENTIALS = credentials('docker-credentials')
+        } 
+    stages {
+        stage('Checkout') {
+            steps {
+                sh 'echo passed'
+                //git branch: 'main', url: 'https://github.com/zeineldin/Java-testapp.git'
+            }
+        }
+        stage('Build the code ') {
+            steps {
+              script {
+                  sh 'ls -ltr'
+                  // build the project and create a JAR file
+                  sh 'cp pom.xml /tmp/ && cp -r src /tmp/src/ && cd /tmp'
+                  sh 'mvn clean package'
+                  //sh 'sleep 120'
+                  // Push the code as a docker image  
+                  //dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                  def dockerImage = docker.image("${DOCKER_IMAGE}")
+                  sh 'docker commit zein ${DOCKER_IMAGE}'
+                  sh 'echo $REGISTRY_CREDENTIALS_PSW | docker login -u $REGISTRY_CREDENTIALS_USR --password-stdin'
+            
+                  sh 'docker push $DOCKER_IMAGE'
+              
+              
+               }
+            }
+            }
+            }
+            }
