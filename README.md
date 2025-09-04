@@ -26,8 +26,10 @@ It’s designed for learning.
 ##  How to Run
 ```bash
 # Clone the repo
-git clone https://github.com/<your-username>/reverse-proxy-java.git
-cd reverse-proxy-java
+mkdir reverse-proxy-java
+cd reverse-proxy-java 
+git clone https://github.com/magdy33/dockerized-reverse-proxy.git
+
 
 # Build & start containers
 docker-compose up --build -d
