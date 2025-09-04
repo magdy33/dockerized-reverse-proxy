@@ -49,6 +49,6 @@ revers-proxy/
 │── architecture.png
 
 
-![Architecture Diagram](./reverse-proxy-arch.png)
+![Architecture Diagram](reverse-proxy-arch.png)
 
 
